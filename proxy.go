@@ -23,21 +23,23 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 	//重置路由表
 	p.table.DelAll()
 	data := r.FormValue("data")
-	arr := strings.Split(data, "\r\n")
-	var newArr []string
-	for _, item := range arr {
-		fmt.Println(item)
-		d := strings.Split(item, "=>")
-		_, err := url.Parse(d[1])
-		if err != nil {
-			fmt.Println(err.Error())
-			continue
+	var newData  = ""
+	if data != "" {
+		arr := strings.Split(data, "\r\n")
+		var newArr []string
+		for _, item := range arr {
+			d := strings.Split(item, "=>")
+			_, err := url.Parse(d[1])
+			if err != nil {
+				fmt.Println(err.Error())
+				continue
+			}
+			newArr = append(newArr, item)
+			fmt.Println(d[0], d[1])
+			p.table.Set(d[0], d[1])
 		}
-		newArr = append(newArr, item)
-		fmt.Println(d[0], d[1])
-		p.table.Set(d[0], d[1])
+		newData = strings.Join(newArr, "\n")
 	}
-	newData := strings.Join(newArr, "\n")
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.Write([]byte("<form method=\"POST\"><center><textarea autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
 }
