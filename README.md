@@ -3,10 +3,12 @@
 
 # 设置示例
 ```
-test=>http://127.0.0.1:8080
+test=>http://192.168.8.8:8080
+dev=>http://192.168.8.6:8888
 
 假如服务域名为 dev.com 映射如下
 dev.com/test/product/list => http://192.168.8.8:8080/product/list
+dev.com/dev/order/list => http://192.168.8.6:8888/order/list
 
 注意:dev.com机器能访问 IP 192.168.8.8
 ```
