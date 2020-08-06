@@ -1,18 +1,3 @@
-# dev-proxy
-开发调试神器
-
-# 设置示例
-```
-test=>http://127.0.0.1:8080
-
-假如服务域名为 dev.com 映射如下
-dev.com/test/product/list => http://192.168.8.8:8080/product/
-
-注意:dev.com机器能访问 IP 192.168.8.8
-```
-
-# 使用方法
-```
 package main
 
 import (
@@ -36,4 +21,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-```
