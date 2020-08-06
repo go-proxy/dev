@@ -23,15 +23,14 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 	//重置路由表
 	p.table.DelAll()
 	data := r.FormValue("data")
-	arr := strings.Split(data, "\n")
+	arr := strings.Split(data, "\r\n")
 	var newArr []string
 	for _, item := range arr {
+		fmt.Println(item)
 		d := strings.Split(item, "=>")
-		if len(d) < 2 {
-			continue
-		}
 		_, err := url.Parse(d[1])
 		if err != nil {
+			fmt.Println(err.Error())
 			continue
 		}
 		newArr = append(newArr, item)
@@ -40,7 +39,7 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 	}
 	newData := strings.Join(newArr, "\n")
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
-	w.Write([]byte("<form><center><textarea autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
+	w.Write([]byte("<form method=\"POST\"><center><textarea autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
 }
 
 func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
