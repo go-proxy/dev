@@ -27,7 +27,7 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 		arr := strings.Split(data, "\r\n")
 		for _, item := range arr {
 			d := strings.Split(item, "=>")
-			if len(d) < 2 {
+			if len(d) < 2 || d[0] == "admin" {
 				continue
 			}
 			_, err := url.Parse("http://" + d[1])
@@ -64,7 +64,7 @@ func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("没有设置信息，请检查配置：" + GetURL(r) + "/admin"))
 		return
 	}
-	target, err := url.Parse(p.table.Get(service))
+	target, err := url.Parse("http://" + p.table.Get(service))
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
