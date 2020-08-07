@@ -84,6 +84,8 @@ func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// explicitly disable User-Agent so it's not set to default value
 			req.Header.Set("User-Agent", "")
 		}
+		req.Host = target.Host
+		req.Header.Set("X-Real-Ip", req.RemoteAddr)
 	}
 	proxy := &httputil.ReverseProxy{Director: director}
 	proxy.ServeHTTP(w, r)
