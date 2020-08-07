@@ -30,7 +30,7 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 			if len(d) < 2 {
 				continue
 			}
-			_, err := url.Parse(d[1])
+			_, err := url.Parse("http://" + d[1])
 			if err != nil {
 				fmt.Println(err.Error())
 				continue
@@ -44,10 +44,10 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 		if service == "" {
 			continue
 		}
-		newData = service + "=>" + newUrl
+		newData = newData + service + "=>" + newUrl + "\n"
 	}
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
-	w.Write([]byte("<form method=\"POST\"><center><textarea placeholder=\"test=>http://192.168.8.8:8080\r\n效果：\r\n" + GetURL(r) + "/test/product/list => http://192.168.8.8:8080/product/list\" autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
+	w.Write([]byte("<form method=\"POST\"><center><textarea placeholder=\"test=>192.168.8.8:8080\r\n效果：\r\n" + GetURL(r) + "/test/product/list => http://192.168.8.8:8080/product/list\" autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
 }
 
 func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
