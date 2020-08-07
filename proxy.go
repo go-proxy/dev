@@ -20,25 +20,31 @@ func NewProxy() *proxy {
 
 //管理逻辑
 func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
-	//重置路由表
-	p.table.DelAll()
 	data := r.FormValue("data")
-	var newData  = ""
 	if data != "" {
+		//重置路由表
+		p.table.DelAll()
 		arr := strings.Split(data, "\r\n")
-		var newArr []string
 		for _, item := range arr {
 			d := strings.Split(item, "=>")
+			if len(d) < 2 {
+				continue
+			}
 			_, err := url.Parse(d[1])
 			if err != nil {
 				fmt.Println(err.Error())
 				continue
 			}
-			newArr = append(newArr, item)
 			fmt.Println(d[0], d[1])
 			p.table.Set(d[0], d[1])
 		}
-		newData = strings.Join(newArr, "\n")
+	}
+	var newData string
+	for service, newUrl := range p.table.GetAll() {
+		if service == "" {
+			continue
+		}
+		newData = service + "=>" + newUrl
 	}
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.Write([]byte("<form method=\"POST\"><center><textarea autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
@@ -63,7 +69,7 @@ func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
-	r.URL.Path = strings.TrimLeft(r.URL.Path, "/"+service)
+	r.URL.Path = strings.TrimPrefix(r.URL.Path, "/"+service)
 	targetQuery := target.RawQuery
 	director := func(req *http.Request) {
 		req.URL.Scheme = target.Scheme
