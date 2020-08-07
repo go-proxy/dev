@@ -10,7 +10,9 @@ dev=>http://192.168.8.6:8888
 dev.com/test/product/list => http://192.168.8.8:8080/product/list
 dev.com/dev/order/list => http://192.168.8.6:8888/order/list
 
-注意:dev.com机器能访问 IP 192.168.8.8
+注意:
+1.每行为一个映射
+2.dev.com机器能访问 IP 192.168.8.8
 ```
 
 # 使用方法

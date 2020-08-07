@@ -47,7 +47,7 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 		newData = service + "=>" + newUrl
 	}
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
-	w.Write([]byte("<form method=\"POST\"><center><textarea autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
+	w.Write([]byte("<form method=\"POST\"><center><textarea placeholder=\"test=>http://192.168.8.8:8080\r\n效果：\r\n" + GetURL(r) + "/test/product/list => http://192.168.8.8:8080/product/list\" autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form>"))
 }
 
 func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
