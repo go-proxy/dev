@@ -14,7 +14,7 @@ func main() {
 		p := flag.String("port", "8888", "port default 8888")
 		port = *p
 	}
-	dev := proxy.NewProxy()
+	dev := dev.NewProxy()
 	log.Println("start port :" + port)
 	err := http.ListenAndServe(":"+port, dev)
 	if err != nil {
