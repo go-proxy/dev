@@ -46,8 +46,12 @@ func (p *proxy) admin(w http.ResponseWriter, r *http.Request) {
 		}
 		newData = newData + service + "=>" + newUrl + "\n"
 	}
+	ip := ClientIP(r)
+	if ip != "" {
+		ip = "本机IP[" + ip + "]<br>"
+	}
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
-	w.Write([]byte("<html><head><title>开发联调神器</title></head><form method=\"POST\"><center>开发联调神器(保存前先刷新)<br><textarea placeholder=\"test=>192.168.8.8:8080\r\n效果：\r\n" + GetURL(r) + "/test/product/list => http://192.168.8.8:8080/product/list\" autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form><html>"))
+	w.Write([]byte("<html><head><title>开发联调神器</title></head><form method=\"POST\"><center>开发联调神器(先刷新再保存)<br>" + ip + "<textarea placeholder=\"test=>192.168.8.8:8080\r\n效果：\r\n" + GetURL(r) + "/test/product/list => http://192.168.8.8:8080/product/list\" autofocus name=\"data\" rows=\"30\" cols=\"100\">" + newData + "</textarea><br><input type=\"submit\" value=\"提交\"></center></form><html>"))
 }
 
 func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -91,23 +95,4 @@ func (p *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	proxy.ServeHTTP(w, r)
 }
 
-//获取url中的第一个参数
-func singleJoiningSlash(a, b string) string {
-	aslash := strings.HasSuffix(a, "/")
-	bslash := strings.HasPrefix(b, "/")
-	switch {
-	case aslash && bslash:
-		return a + b[1:]
-	case !aslash && !bslash:
-		return a + "/" + b
-	}
-	return a + b
-}
 
-func GetURL(r *http.Request) (Url string) {
-	scheme := "http://"
-	if r.TLS != nil {
-		scheme = "https://"
-	}
-	return strings.Join([]string{scheme, r.Host}, "")
-}
