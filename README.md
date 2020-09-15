@@ -17,6 +17,10 @@ dev.com/dev/order/list => http://192.168.8.6:8888/order/list
 2.dev.com机器能访问 IP 192.168.8.8
 3.目前只能代理http服务
 ```
+# docker 
+```
+docker run -d -p 8888:80 gogateway/dev
+```
 
 # 使用方法
 ```
@@ -44,3 +48,8 @@ func main() {
 	}
 }
 ```
+
+# 应用示例
+dev-ingress 一个简单的k8s-ingress 
+
+项目地址 ：https://github.com/gogateway/dev
